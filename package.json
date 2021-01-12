@@ -9,11 +9,15 @@
   "license": "MIT",
   "private": "true",
   "main": "src/index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev:workshop": "nodemon src/00-workshop-demo-files/index.js",
     "dev": "nodemon src/index.js",
     "test": "jest --watch",
-    "test:01:crud-api": "jest -t 'books crud controllers' --watch"
+    "test:01:crud-api": "jest -t 'books crud controllers' --watch",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",

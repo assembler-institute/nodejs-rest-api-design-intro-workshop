@@ -25,6 +25,7 @@ In this workshop you will learn how to build a REST API with Node.js, MongoDB an
 - [Creating a Sign Up Controller](#creating-a-sign-up-controller)
 - [Password Reset with Firebase Auth](#password-reset-with-firebase-auth)
 - [MongoDB Atlas](#mongodb-atlas)
+- [Heroku](#heroku)
 - [Resources](#resources)
 
 ## Getting Started
@@ -1786,6 +1787,379 @@ If everything went fine, we should now try to create a new user from the Client 
 <img src='src/img/mongodb-atlas-collections.png' width='600'>
 
 ---
+
+## Heroku
+
+So far we have seen how to create a server, add authentication and then use a Production ready MongoDB provider.
+
+Now it is time to deploy our Node.js App and for this we will use Heroku.
+
+### What is Heroku
+
+Heroku is a cloud platform that lets companies build, deliver, monitor and scale apps without having to create our own physical servers. We simply use their hardware infrastructure and deploy our apps on them.
+
+### Features
+
+#### Built For Continuous Integration And Delivery
+
+Deploy from Git, GitHub, or Docker, or using an API.
+
+#### Simple Horizontal And Vertical Scalability
+
+Easily scale apps in a single click with no downtime.
+
+#### The CLI
+
+Heroku has an incredible Command Line Interface to help us to manage and control our applications on it. Commands like `heroku logs` will be your best friends when you use them.
+
+#### Multi-Language Support
+
+Run multiple languages, like Node, Ruby, Java, Clojure, Scala, Go, Python, and PHP all from the same platform.
+
+#### Trusted Application Operations
+
+Heroku has as main option git-based deployment. You can "link" your app directly from GitHub and enable default deployment each time when you push some code into `main`.
+
+### Getting Started With Heroku
+
+First, make sure that you have the cli installed. In not, read the instructions at the begging of this `README`.
+
+```bash
+$ heroku --version
+```
+
+#### Creating an Heroku Account
+
+First, you will need to create an account in the [Heroku web page](https://signup.heroku.com/login).
+
+<img src='src/img/heroku-sign-up.png' width='600'>
+
+---
+
+Then, you will need to login with the heroku cli:
+
+```bash
+$ heroku login
+ ›   Warning: heroku update available from 7.47.6 to 7.47.7.
+heroku: Press any key to open up the browser to login or q to exit:
+Opening browser to https://cli-auth.heroku.com/auth/cli/browser/XXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+heroku: Waiting for login... ⣾
+
+```
+
+This will open a tab in your browser so that you can login:
+
+<img src='src/img/heroku-login-init.png' width='600'>
+
+---
+
+<img src='src/img/heroku-login-done.png' width='600'>
+
+---
+
+If everything went fine you should see the result in the terminal:
+
+```bash
+Logging in... done
+Logged in as dani@mail.com
+```
+
+#### Creating Our First Heroku App
+
+Now that we have logged in, we can create an app with the Heroku CLI.
+
+```bash
+ heroku create dani-assembler-demo-app
+Creating ⬢ dani-assembler-demo-app... done
+https://dani-assembler-demo-app.herokuapp.com/ | https://git.heroku.com/dani-assembler-demo-app.git
+```
+
+If you get an error it's because Heroku app names are globally available which means that they have to be globally unique. If another app exists in the Heroku domains it will fail.
+
+```bash
+ Name workshop-app is already taken
+```
+
+> An easy trick is to use a namespace for each app
+
+```bash
+<your-name>-<app-name>
+```
+
+---
+
+Then, if we open the Heroku dashboard we should see our app.
+
+<img src='src/img/heroku-app-done.png' width='600'>
+
+---
+
+### Storing the `.env` Variables in Heroku
+
+Before we deploy the app we first need to configure all the environment variables we were using.
+
+In Heroku can do so in 2 ways:
+
+1. in the dashboard in the config of the app
+2. using the command line
+
+##### Setting Env Variables in the Heroku dashboard
+
+<img src='src/img/heroku-env-vars-dashboard.png' width='600'>
+
+##### Setting Env Variables in the Heroku CLI
+
+We can set an env variable with `heroku config:set ENV_VAR_NAME=value`.
+
+```bash
+$ heroku config:set FB_CERT_TYPE=service_account
+Setting FB_CERT_TYPE and restarting ⬢ dani-assembler-demo-app... done, v3
+FB_CERT_TYPE: service_account
+```
+
+Then we can access the same config var with `heroku config:get ENV_VAR_NAME`
+
+```bash
+$ heroku config:get FB_CERT_TYPE
+service_account
+```
+
+Once have have set all the environment variables we can start deploying the app.
+
+First, if we look at the remotes we currently have:
+
+```bash
+$ git remote -v
+
+heroku  https://git.heroku.com/dani-assembler-demo-app.git (fetch)
+heroku  https://git.heroku.com/dani-assembler-demo-app.git (push)
+```
+
+We can see that we have a new `heroku` git remote that was created for use when we used the `heroku create` CLI command. We can push to this remote to deploy a new version of our app.
+
+#### Important Things to Know Before We Deploy
+
+- Heroku will use the `start` script from our `package.json` file to build the server when we deploy it
+- it will set the `NODE_ENV` environment variable to `production`
+- it can be configured to run other scripts if we need to optimize the build, you can learn more in the docs
+
+So we need to add a `start` npm script:
+
+```diff
+diff --git a/package.json b/package.json
+index 41acbbb..9bfcea5 100644
+--- a/package.json
++++ b/package.json
+@@ -13,7 +13,8 @@
+     "dev:workshop": "nodemon src/00-workshop-demo-files/index.js",
+     "dev": "nodemon src/index.js",
+     "test": "jest --watch",
+-    "test:01:crud-api": "jest -t 'books crud controllers' --watch"
++    "test:01:crud-api": "jest -t 'books crud controllers' --watch",
++    "start": "node src/index.js"
+   },
+   "repository": {
+     "type": "git",
+```
+
+#### Specifying a Node.js Version
+
+You should always specify the Node.js version that matches the runtime you’re developing and testing with.
+
+To find your version locally:
+
+```bash
+$ node --version
+v14.15.4
+```
+
+Then, include it in the `package.json` file:
+
+```json
+{
+  "private": "true",
+  "main": "src/index.js",
+  "engines": {
+    "node": "14.x"
+  }
+}
+```
+
+As a last step before we deploy the app, we can update the book schema and controllers so that they don't have a user relation so that we can use it to demo making a request to the deployed api.
+
+```diff
+diff --git a/src/controllers/book-controller.js b/src/controllers/book-controller.js
+index 1c55a6d..96a1e13 100644
+--- a/src/controllers/book-controller.js
++++ b/src/controllers/book-controller.js
+@@ -36,12 +36,11 @@ const { logger } = require("../config/config");
+  * with the error object that is caught
+  */
+ async function createBook(req, res, next) {
+-  const { title, author, genre, year, pages } = req.body;
++  const { title, genre, year, pages } = req.body;
+
+   try {
+     const book = await db.Book.create({
+       title: title,
+-      author: author,
+       genre: genre,
+       year: year,
+       pages: pages,
+@@ -125,13 +124,6 @@ async function getSingleBook(req, res, next) {
+         title: 1,
+         pages: 1,
+       })
+-      .populate({
+-        path: "author",
+-        select: {
+-          firstName: 1,
+-          lastName: 1,
+-        },
+-      })
+       .lean()
+       .exec();
+```
+
+```diff
+diff --git a/src/models/book-model.js b/src/models/book-model.js
+index 9f22c96..980261a 100644
+--- a/src/models/book-model.js
++++ b/src/models/book-model.js
+@@ -6,11 +6,6 @@ const BookSchema = new mongoose.Schema({
+     required: true,
+     trim: true,
+   },
+-  author: {
+-    type: mongoose.SchemaTypes.ObjectId,
+-    required: true,
+-    ref: "user",
+-  },
+   genre: {
+     type: String,
+     required: true,
+```
+
+---
+
+We also need to adjust our `seed()` methods that are used to create books:
+
+---
+
+```diff
+diff --git a/src/db/seed.js b/src/db/seed.js
+index 41a306b..d0a894e 100644
+--- a/src/db/seed.js
++++ b/src/db/seed.js
+@@ -9,16 +9,8 @@ async function seedUsers() {
+ }
+
+ async function seedBooks() {
+-  await Promise.all([db.User.deleteMany({}), db.Book.deleteMany({})]);
+-
+-  const users = await db.User.insertMany([...getSeedUsers()]);
+-  const userIds = users.map((user) => user._id);
+-  const booksWithAuthors = [...getSeedBooks()].map((book) => ({
+-    ...book,
+-    author: getRandomItem(userIds),
+-  }));
+-
+-  return db.Book.insertMany(booksWithAuthors);
++  await db.Book.deleteMany({});
++  return db.Book.insertMany(getSeedBooks());
+ }
+
+ function getRandomItem(arr = []) {
+```
+
+```diff
+diff --git a/src/db/seed-data.js b/src/db/seed-data.js
+index 86a19a4..b5fa0c6 100644
+--- a/src/db/seed-data.js
++++ b/src/db/seed-data.js
+@@ -49,70 +49,60 @@ function getSeedBooks() {
+   return [
+     {
+       title: "Incubus Sky",
+-      author: null,
+       genre: "Fantasy",
+       year: 2010,
+       pages: 220,
+     },
+     {
+       title: "The Twilight Wanderer",
+-      author: null,
+       genre: "Fantasy",
+       year: 2012,
+       pages: 300,
+     },
+     {
+       title: "City of Monday",
+-      author: null,
+       genre: "Crime",
+       year: 2020,
+       pages: 250,
+     },
+     {
+       title: "The Saturday's Shaman",
+-      author: null,
+       genre: "Romance",
+       year: 2015,
+       pages: 280,
+     },
+     {
+       title: "The Underground of the Bane",
+-      author: null,
+       genre: "Thriller",
+       year: 2020,
+       pages: 20,
+     },
+     {
+       title: "God in the Roadtrip",
+-      author: null,
+       genre: "Fantasy",
+       year: 2018,
+       pages: 320,
+     },
+     {
+       title: "Sunken Haven",
+-      author: null,
+       genre: "Comedy",
+       year: 2017,
+       pages: 240,
+     },
+     {
+       title: "The Harrowing Temper",
+-      author: null,
+       genre: "Crime",
+       year: 2012,
+       pages: 120,
+     },
+     {
+       title: "Sleep of Hallows",
+-      author: null,
+       genre: "Fantasy",
+       year: 2012,
+       pages: 220,
+     },
+     {
+       title: "The Cavern's Fire",
+-      author: null,
+       genre: "Crime",
+       year: 2014,
+       pages: 240,
+```
+
+Then, we can create a commit and push to the `heroku` remote:
+
+```bash
+$ git commit...
+```
+
+```bash
+$ git push heroku main
+```
 
 ## Resources
 
