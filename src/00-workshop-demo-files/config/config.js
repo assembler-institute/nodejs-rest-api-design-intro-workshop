@@ -23,7 +23,7 @@ const CONFIG = {
       debug: logger.debug,
     },
     db: {
-      url: process.env.DB_URL,
+      url: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@workshop-cluster.ul0ax.mongodb.net/workshop-db-prod?retryWrites=true&w=majority`,
     },
     firebase: {
       certConfig: {
@@ -56,7 +56,8 @@ const CONFIG = {
       debug: logger.debug,
     },
     db: {
-      url: process.env.DB_URL,
+      url: `mongodb://localhost:27017/workshop-db-dev`,
+      // url: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@workshop-cluster.ul0ax.mongodb.net/workshop-db-dev?retryWrites=true&w=majority`,
     },
     firebase: {
       certConfig: {
@@ -89,7 +90,7 @@ const CONFIG = {
       debug: logger.debug,
     },
     db: {
-      url: process.env.DB_URL,
+      url: `mongodb://localhost:27017/workshop-db-test`,
     },
     firebase: {
       certConfig: {

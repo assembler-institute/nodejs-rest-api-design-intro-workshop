@@ -24,6 +24,7 @@ In this workshop you will learn how to build a REST API with Node.js, MongoDB an
 - [⚠️ Security Considerations Before You Get Started](#️-security-considerations-before-you-get-started)
 - [Creating a Sign Up Controller](#creating-a-sign-up-controller)
 - [Password Reset with Firebase Auth](#password-reset-with-firebase-auth)
+- [MongoDB Atlas](#mongodb-atlas)
 - [Resources](#resources)
 
 ## Getting Started
@@ -1588,6 +1589,203 @@ In order to allow users to change their passwords we can use the `auth.sendPassw
 ---
 
 Now we can login with the new password.
+
+## MongoDB Atlas
+
+So far, we have stored the data in the MongoDB DB locally. But this won't work if we want to deploy our app.
+
+```bash
+mongodb://localhost:27017/workshop-db
+```
+
+In order to host a MongoDB DB we can use the MongoDB Atlas service.
+
+<img src='src/img/mongodb-atlas-homepage.png' width='600'>
+
+---
+
+To get started, create an account and then sign in.
+
+<img src='src/img/mongodb-atlas-signup.png' width='600'>
+
+---
+
+Then, click on the `Build a cluster` button to create a new cluster.
+
+<img src='src/img/mongodb-atlas-build-cluster.png' width='600'>
+
+---
+
+Choose the `Free` plan.
+
+<img src='src/img/mongodb-atlas-free-cluster.png' width='600'>
+
+---
+
+Choose the AWS Provider, and the Ireland region.
+
+<img src='src/img/mongodb-atlas-region-provider.png' width='600'>
+
+---
+
+Make sure to choose the M0 Free tier.
+
+<img src='src/img/mongodb-atlas-free-tier.png' width='600'>
+
+---
+
+Then, as an optional step you can change the cluster name.
+
+<img src='src/img/mongodb-atlas-cluster-name.png' width='600'>
+
+---
+
+Then, click on `Create cluster` to go to the next step and wait for the cluster to finish building.
+
+<img src='src/img/mongodb-atlas-cluster-wait-build.png' width='600'>
+
+---
+
+Once the cluster is created we can click on connect.
+
+<img src='src/img/mongodb-atlas-cluster-done.png' width='600'>
+
+<img src='src/img/mongodb-atlas-cluster-connect.png' width='600'>
+
+---
+
+Click on `Copy` and now you can use the connection string in the Node.js app.
+
+<img src='src/img/mongodb-atlas-cluster-copy.png' width='600'>
+
+---
+
+You will have to replace the `username` and `password` with the ones of your account. Since this is sensitive information you should use env variables.
+
+```js
+mongodb+srv://<username>:<password>@workshop-cluster.ul0ax.mongodb.net/<dbname>?retryWrites=true&w=majority
+```
+
+### Storing the Credentials in `.env` Variables
+
+Open the `Database Access` tab and create a user that will be able to connect to the Database. Once created, copy the `username` and `password` to store them in an `.env` file.
+
+<img src='src/img/mongodb-atlas-cluster-user-create.png' width='600'>
+
+---
+
+<img src='src/img/mongodb-atlas-password-auth.png' width='600'>
+
+---
+
+Choose the `readAndWriteToAnyDatabase` permissions.
+
+<img src='src/img/mongodb-atlas-permissions.png' width='600'>
+
+---
+
+And click on `Create` to finish creating the user.
+
+<img src='src/img/mongodb-atlas-user-created.png' width='600'>
+
+---
+
+Then, we need to add an IP Address so that we can connect to the server.
+
+Click on the `Network Access` tab and then on `Add IP Address`.
+
+<img src='src/img/mongodb-atlas-add-ip-address.png' width='600'>
+
+---
+
+Click on `Allow from anywhere`
+
+<img src='src/img/mongodb-atlas-allow-from-anywhere.png' width='600'>
+
+---
+
+Then wait for the ip to be created
+
+<img src='src/img/mongodb-atlas-ip-done.png' width='600'>
+
+---
+
+Then, open the `.env` file and create the following entries that contain the `username` and `password` of your account.
+
+```bash
+MONGODB_USERNAME="username"
+MONGODB_PASSWORD="password"
+```
+
+### Connecting to the MongoDB Atlas DB
+
+Open the `src/config/config.js` file and enter the DB URL.
+
+```js
+url: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@workshop-cluster.ul0ax.mongodb.net/workshop-db-prod?retryWrites=true&w=majority`,
+```
+
+```diff
+diff --git a/src/00-workshop-demo-files/config/config.js b/src/00-workshop-demo-files/config/config.js
+index a785403..03f79e8 100644
+--- a/src/00-workshop-demo-files/config/config.js
++++ b/src/00-workshop-demo-files/config/config.js
+@@ -23,7 +23,7 @@ const CONFIG = {
+       debug: logger.debug,
+     },
+     db: {
+-      url: process.env.DB_URL,
++      url: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@workshop-cluster.ul0ax.mongodb.net/workshop-db-prod?retryWrites=true&w=majority`,
+     },
+     firebase: {
+       certConfig: {
+@@ -56,7 +56,7 @@ const CONFIG = {
+       debug: logger.debug,
+     },
+     db: {
+-      url: process.env.DB_URL,
++      // url: `mongodb://localhost:27017/workshop-db-dev`,
++      url: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@workshop-cluster.ul0ax.mongodb.net/workshop-db-dev?retryWrites=true&w=majority`,
+     },
+     firebase: {
+       certConfig: {
+@@ -89,7 +89,7 @@ const CONFIG = {
+       debug: logger.debug,
+     },
+     db: {
+-      url: process.env.DB_URL,
++      url: `mongodb://localhost:27017/workshop-db-test`,
+     },
+     firebase: {
+       certConfig: {
+(END)
+```
+
+Then, you should use the URL in the `connect` method.
+
+```js
+const mongoose = require("mongoose");
+const config = require("../config/config");
+
+function connect() {
+  return mongoose.connect(config.db.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
+}
+
+module.exports = connect;
+```
+
+If everything went fine, we should now try to create a new user from the Client app which should appear in the Atlas DB.
+
+---
+
+<img src='src/img/mongodb-atlas-collections.png' width='600'>
+
+---
 
 ## Resources
 
