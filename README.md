@@ -2151,6 +2151,55 @@ index 86a19a4..b5fa0c6 100644
        pages: 240,
 ```
 
+### Storing the Google Service Account in Heroku
+
+Before we push to Heroku we need to adjust the way we store the Google Service Account. First, we need to remove the quotes around the `FB_CERT_PRIVATE_KEY` variable in the `.env` file.
+
+```diff
+- FB_CERT_PRIVATE_KEY = "-----BEGIN PRIVATE KEY-----\n-\n"
++ FB_CERT_PRIVATE_KEY = -----BEGIN PRIVATE KEY-----\n-\n
+```
+
+And we need to add the following code to the config file for each type of deployment (test, production and development):
+
+```diff
+const CONFIG = {
+  production: {
+    ...
+    firebase: {
+      certConfig: {
+        ...
+-        private_key: process.env.FB_CERT_PRIVATE_KEY,
++        private_key: process.env.FB_CERT_PRIVATE_KEY.replace(/\\n/gm, "\n"),
+        ...
+      },
+    },
+  },
+  development: {
+    ...
+    firebase: {
+      certConfig: {
+        ...
+-        private_key: process.env.FB_CERT_PRIVATE_KEY,
++        private_key: process.env.FB_CERT_PRIVATE_KEY.replace(/\\n/gm, "\n"),
+        ...
+      },
+    },
+  },
+  test: {
+    ...
+    firebase: {
+      certConfig: {
+        ...
+-        private_key: process.env.FB_CERT_PRIVATE_KEY,
++        private_key: process.env.FB_CERT_PRIVATE_KEY.replace(/\\n/gm, "\n"),
+        ...
+      },
+    },
+  },
+};
+```
+
 Then, we can create a commit and push to the `heroku` remote:
 
 ```bash
@@ -2213,7 +2262,16 @@ heroku logs --tail
 ```
 
 ```bash
-
+2021-01-12T17:12:06.000000+00:00 app[api]: Build succeeded
+2021-01-12T17:12:08.452244+00:00 app[web.1]:
+2021-01-12T17:12:08.452259+00:00 app[web.1]: > nodejs-rest-api-design-intro-workshop@1.0.0 start /app
+2021-01-12T17:12:08.452260+00:00 app[web.1]: > node src/index.js
+2021-01-12T17:12:08.452260+00:00 app[web.1]:
+2021-01-12T17:12:10.690433+00:00 app[web.1]: DB connected
+2021-01-12T17:12:11.064056+00:00 app[web.1]: Server running at http://localhost:40454
+2021-01-12T17:12:11.343617+00:00 heroku[web.1]: State changed from starting to up
+2021-01-12T17:13:11.079563+00:00 app[web.1]: GET /books 200 108.140 ms - 648
+2021-01-12T17:13:11.070230+00:00 heroku[router]: at=info method=GET path="/books" host=dani-assembler-demo-app.herokuapp.com request_id=a8b30ede-7e77-4746-9274-27ff03cdb313 fwd="2.152.148.5" dyno=web.1 connect=0ms service=127ms status=200 bytes=1480 protocol=https
 ```
 
 ## Resources
