@@ -2157,8 +2157,63 @@ Then, we can create a commit and push to the `heroku` remote:
 $ git commit...
 ```
 
+This command will push from the current `04-heroku` branch to the `main` branch on Heroku because by default it tracks `main` for deploys.
+
 ```bash
-$ git push heroku main
+$ git push heroku 04-heroku:main
+```
+
+Then, after the push we should see the following output in the terminal while it is building the app:
+
+```bash
+ git push heroku 04-heroku:main
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+remote: Compressing source files... done.
+remote: Building source:
+remote:
+remote: -----> Building on the Heroku-20 stack
+remote: -----> Node.js app detected
+remote:
+remote: -----> Creating runtime environment
+remote:
+remote:        NPM_CONFIG_LOGLEVEL=error
+remote:        NODE_VERBOSE=false
+remote:        NODE_ENV=production
+remote:        NODE_MODULES_CACHE=true
+remote:
+remote: -----> Installing binaries
+remote:        engines.node (package.json):  14.x
+remote:        engines.npm (package.json):   unspecified (use default)
+...
+...
+...
+```
+
+And finally, if everything went fine, we should see the remote url of the deployed server:
+
+```bash
+...
+...
+...
+remote:        https://dani-assembler-demo-app.herokuapp.com/ deployed to Heroku
+remote:
+remote: Verifying deploy... done.
+To https://git.heroku.com/dani-assembler-demo-app.git
+   842d92f..dc46ab2  04-heroku -> main
+```
+
+If we connect to it and the `https://dani-assembler-demo-app.herokuapp.com/books` endpoint we should see the response:
+
+<img src='src/img/heroku-response.png' width='600'>
+
+Furthermore, we can use the following command to see the logs that the server outputs. This is especially useful to see it it crashed.
+
+```bash
+heroku logs --tail
+```
+
+```bash
+
 ```
 
 ## Resources

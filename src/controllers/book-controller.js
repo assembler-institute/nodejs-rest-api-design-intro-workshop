@@ -36,12 +36,11 @@ const { logger } = require("../config/config");
  * with the error object that is caught
  */
 async function createBook(req, res, next) {
-  const { title, author, genre, year, pages } = req.body;
+  const { title, genre, year, pages } = req.body;
 
   try {
     const book = await db.Book.create({
       title: title,
-      author: author,
       genre: genre,
       year: year,
       pages: pages,
@@ -124,13 +123,6 @@ async function getSingleBook(req, res, next) {
       .select({
         title: 1,
         pages: 1,
-      })
-      .populate({
-        path: "author",
-        select: {
-          firstName: 1,
-          lastName: 1,
-        },
       })
       .lean()
       .exec();
