@@ -26,6 +26,7 @@ In this workshop you will learn how to build a REST API with Node.js, MongoDB an
 - [Password Reset with Firebase Auth](#password-reset-with-firebase-auth)
 - [MongoDB Atlas](#mongodb-atlas)
 - [Heroku](#heroku)
+- [Testing REST APIs That Use Firebase Auth](#testing-rest-apis-that-use-firebase-auth)
 - [Resources](#resources)
 
 ## Getting Started
@@ -2272,6 +2273,69 @@ heroku logs --tail
 2021-01-12T17:12:11.343617+00:00 heroku[web.1]: State changed from starting to up
 2021-01-12T17:13:11.079563+00:00 app[web.1]: GET /books 200 108.140 ms - 648
 2021-01-12T17:13:11.070230+00:00 heroku[router]: at=info method=GET path="/books" host=dani-assembler-demo-app.herokuapp.com request_id=a8b30ede-7e77-4746-9274-27ff03cdb313 fwd="2.152.148.5" dyno=web.1 connect=0ms service=127ms status=200 bytes=1480 protocol=https
+```
+
+## Testing REST APIs That Use Firebase Auth
+
+In order to learn how to test the endpoints that use the Firebase Auth SDK we will use a mocked version of the `src/utils/auth/verifyIdToken.js` function.
+
+```js
+// src/utils/auth/verifyIdToken.js
+const { auth } = require("../../firebase/firebase");
+
+function verifyIdToken(token) {
+  return auth.verifyIdToken(token);
+}
+
+module.exports = verifyIdToken;
+```
+
+```diff
+diff --git a/src/middleware/auth-middleware.js b/src/middleware/auth-middleware.js
+index 77fb723..c997238 100644
+--- a/src/middleware/auth-middleware.js
++++ b/src/middleware/auth-middleware.js
+@@ -1,4 +1,4 @@
+-const { auth } = require("../firebase/firebase");
++const verifyIdToken = require("../utils/auth/verifyIdToken");
+
+ async function authMiddleware(req, res, next) {
+   if (
+@@ -10,7 +10,7 @@ async function authMiddleware(req, res, next) {
+     const bearerToken = req.headers.authorization.substr(7);
+
+     try {
+-      const userClaims = await auth.verifyIdToken(bearerToken);
++      const userClaims = await verifyIdToken(bearerToken);
+
+       const { email, uid } = userClaims;
+```
+
+Mocked in tests:
+
+```js
+jest.mock("../../utils/auth/verifyIdToken", () => {
+  return jest.fn().mockImplementation(() => {
+    return Promise.resolve(mockUserClaims);
+  });
+});
+```
+
+```js
+// mock user claims info used in tests
+const mockUserClaims = {
+  iss: "https://securetoken.google.com/my-test-app",
+  aud: "my-test-app-01",
+  auth_time: 1611227759,
+  user_id: "bd88f3d0-ebf6-500a-bbd0-87bc9c7e9c2e",
+  sub: "206037fe-39e1-5a0a-84e0-4c67cabbeed9",
+  iat: 1611227759,
+  exp: 1611231359,
+  email: "test-user@mail.com",
+  email_verified: true,
+  firebase: { identities: { email: [""] }, sign_in_provider: "password" },
+  uid: "c7e9dfc1-0dbf-595a-bb0e-ea92a272e8ca",
+};
 ```
 
 ## Resources
