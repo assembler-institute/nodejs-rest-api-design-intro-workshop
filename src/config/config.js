@@ -3,7 +3,12 @@ const logger = require("loglevel");
 
 dotenv.config();
 
-const ENV = process.env.NODE_ENV || "development";
+const {
+  MONGODB_USERNAME,
+  MONGODB_PASSWORD,
+  MONGODB_PROJECT_ID,
+  NODE_ENV: ENV = "development",
+} = process.env;
 
 logger.enableAll();
 
@@ -23,7 +28,7 @@ const CONFIG = {
       debug: logger.debug,
     },
     db: {
-      url: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@workshop-cluster.ul0ax.mongodb.net/workshop-db-prod?retryWrites=true&w=majority`,
+      url: `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_PROJECT_ID}.mongodb.net/workshop-db-prod?retryWrites=true&w=majority`,
     },
     firebase: {
       certConfig: {
@@ -57,7 +62,6 @@ const CONFIG = {
     },
     db: {
       url: `mongodb://localhost:27017/workshop-db-dev`,
-      // url: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@workshop-cluster.ul0ax.mongodb.net/workshop-db-dev?retryWrites=true&w=majority`,
     },
     firebase: {
       certConfig: {
