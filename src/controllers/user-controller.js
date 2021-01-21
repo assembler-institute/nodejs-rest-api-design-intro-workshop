@@ -1,4 +1,5 @@
 const db = require("../models");
+const { logger } = require("../config/config");
 
 async function getUsers(req, res, next) {
   try {
@@ -6,6 +7,7 @@ async function getUsers(req, res, next) {
       .select({
         firstName: 1,
         lastName: 1,
+        email: 1,
       })
       .limit(10)
       .lean()
@@ -13,6 +15,7 @@ async function getUsers(req, res, next) {
 
     res.status(200).send({
       data: users,
+      error: null,
     });
   } catch (error) {
     next(error);
@@ -20,18 +23,19 @@ async function getUsers(req, res, next) {
 }
 
 async function getUserDetails(req, res, next) {
-  const { userId } = req.params;
+  const { uid } = req.user;
 
   try {
     const user = await db.User.findOne({
-      _id: userId,
+      _id: uid,
     })
-      .select("-password -__v -createdAt -updatedAt")
+      .select("-__v -createdAt -updatedAt")
       .lean()
       .exec();
 
     res.status(200).send({
       data: user,
+      error: null,
     });
   } catch (error) {
     next(error);
@@ -39,14 +43,14 @@ async function getUserDetails(req, res, next) {
 }
 
 async function createUser(req, res, next) {
-  const { firstName, lastName, email, password, speaks } = req.body;
+  const { id, firstName, lastName, email, speaks } = req.body;
 
   try {
     const user = await db.User.create({
+      id,
       firstName,
       lastName,
       email,
-      password,
       speaks,
     });
 
@@ -58,6 +62,7 @@ async function createUser(req, res, next) {
         email: user.email,
         speaks: user.speaks,
       },
+      error: null,
     });
   } catch (error) {
     next(error);
@@ -89,6 +94,7 @@ async function updateUser(req, res, next) {
 
     res.status(200).send({
       data: updatedUser,
+      error: null,
     });
   } catch (error) {
     next(error);
@@ -110,6 +116,7 @@ async function deleteUser(req, res, next) {
     } else {
       res.status(500).send({
         data: "User not removed",
+        error: null,
       });
     }
   } catch (error) {
@@ -127,12 +134,10 @@ async function signUp(req, res, next) {
       return res.sendStatus(200);
     }
 
-    const newUser = await db.User.create({
+    await db.User.create({
       _id: uid,
       email: email,
     });
-
-    logger.debug(newUser);
 
     res.sendStatus(201);
   } catch (error) {

@@ -1,45 +1,45 @@
 function getSeedUsers() {
   return [
     {
+      _id: "135bc730-5f0b-5ead-88c1-bccd3dc89e9d",
       firstName: "Jordan",
       lastName: "Peterson",
       email: "woga@wi.lu",
-      password: "jordan-super-password",
       speaks: ["english", "javascript"],
     },
     {
+      _id: "a133dc0e-8164-573c-9db0-5943e6f78f5e",
       firstName: "Margaret",
       lastName: "Watkins",
       email: "edde@kodbi.eh",
-      password: "margaret-super-password",
       speaks: ["catalan", "spanish"],
     },
     {
+      _id: "ce32c467-34f2-5f6a-9b39-490050e9b706",
       firstName: "Mable",
       lastName: "Schneider",
       email: "ba@wuf.ws",
-      password: "mable-super-password",
       speaks: ["german", "english"],
     },
     {
+      _id: "8f1df2ce-2f0a-548c-8fac-30474c8d6464",
       firstName: "Alta",
       lastName: "Harris",
       email: "cuk@boeli.gn",
-      password: "alta-super-password",
       speaks: ["english", "spanish"],
     },
     {
+      _id: "8997ca9a-875a-514a-ab8e-ca471e750746",
       firstName: "Darrell",
       lastName: "Wilkerson",
       email: "ecdescu@riwluzhok.pf",
-      password: "darrell-super-password",
       speaks: ["english", "javascript"],
     },
     {
+      _id: "4404b0e6-5bba-5cdd-9965-c675c263b103",
       firstName: "Ryan",
       lastName: "McGuire",
       email: "beta@houboem.py",
-      password: "ryan-super-password",
       speaks: ["english", "spanish"],
     },
   ];
