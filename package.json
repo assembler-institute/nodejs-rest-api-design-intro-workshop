@@ -20,7 +20,7 @@
     "url": "https://github.com/assembler-school/nodejs-rest-api-design-intro-workshop.git"
   },
   "dependencies": {
-    "bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
@@ -29,7 +29,7 @@
     "loglevel": "^1.7.1",
     "mongoose": "^5.11.9",
     "npm-check-updates": "^10.2.5",
-    "validator": "^13.5.2"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
