@@ -8,6 +8,13 @@ async function seedUsers() {
   await db.User.create([...users]);
 }
 
+async function seedPublishers() {
+  const publishers = getSeedPublishers();
+
+  await db.Publishers.deleteMany({});
+  await db.Publishers.create([...publishers]);
+}
+
 async function seedBooks() {
   await Promise.all([db.User.deleteMany({}), db.Book.deleteMany({})]);
 

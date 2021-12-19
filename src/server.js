@@ -2,8 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const { json } = require("body-parser");
-
-const bookRouter = require("./routes/book-routes");
+const UserRouter = require("./routes/user-routes");
 
 const app = express();
 
@@ -11,6 +10,12 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(json());
 
-app.use(bookRouter);
+app.get("/", (req, res) => {
+  res.status(200).send({
+    data: "Connected!",
+  });
+});
+
+app.use("/users", UserRouter);
 
 module.exports = app;

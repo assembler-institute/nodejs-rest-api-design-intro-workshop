@@ -49,73 +49,93 @@ function getSeedBooks() {
   return [
     {
       title: "Incubus Sky",
-      author: null,
+      author: "Pedro",
       genre: "Fantasy",
       year: 2010,
       pages: 220,
     },
     {
       title: "The Twilight Wanderer",
-      author: null,
+      author: "Pablo",
       genre: "Fantasy",
       year: 2012,
       pages: 300,
     },
     {
       title: "City of Monday",
-      author: null,
+      author: "Peter",
       genre: "Crime",
       year: 2020,
       pages: 250,
     },
     {
       title: "The Saturday's Shaman",
-      author: null,
+      author: "Paola",
       genre: "Romance",
       year: 2015,
       pages: 280,
     },
     {
       title: "The Underground of the Bane",
-      author: null,
+      author: "Phill",
       genre: "Thriller",
       year: 2020,
       pages: 20,
     },
     {
       title: "God in the Roadtrip",
-      author: null,
+      author: "Paulo",
       genre: "Fantasy",
       year: 2018,
       pages: 320,
     },
     {
       title: "Sunken Haven",
-      author: null,
+      author: "Paul",
       genre: "Comedy",
       year: 2017,
       pages: 240,
     },
     {
       title: "The Harrowing Temper",
-      author: null,
+      author: "Pippin",
       genre: "Crime",
       year: 2012,
       pages: 120,
     },
     {
       title: "Sleep of Hallows",
-      author: null,
+      author: "Pharrel",
       genre: "Fantasy",
       year: 2012,
       pages: 220,
     },
     {
       title: "The Cavern's Fire",
-      author: null,
+      author: "Paris",
       genre: "Crime",
       year: 2014,
       pages: 240,
+    },
+  ];
+}
+function getSeedPublishers() {
+  return [
+    {
+      name: "Underground",
+      authors: ["Phill", "Pippin", "Paul"],
+      books: ["The Cavern's Fire", "Sleep of Hallows", "Sunken Haven"],
+      year: 2010,
+    },
+    {
+      name: "Incubus",
+      authors: ["Paris", "Pharrel", "Peter"],
+      books: [
+        "The Underground of the Bane",
+        "The Harrowing Temper",
+        "City of Monday",
+      ],
+      year: 2010,
     },
   ];
 }
@@ -123,4 +143,5 @@ function getSeedBooks() {
 module.exports = {
   getSeedUsers: getSeedUsers,
   getSeedBooks: getSeedBooks,
+  getSeedPublishers: getSeedPublishers,
 };
