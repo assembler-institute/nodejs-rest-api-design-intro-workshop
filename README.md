@@ -6,8 +6,13 @@ CRUD REST-API with Nodejs, Express and MongoDB deployed using Clouding.io, nginx
 </p>
 
 <hr/>
+
 ## Deployment dom: https://yaigenes.cat
+
+<hr/>
+
 ## Repo: https://github.com/YaiGenes/node_API_REST.git
+
 <hr/>
 
 ## API-CRUD Documentation
