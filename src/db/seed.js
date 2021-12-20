@@ -1,5 +1,9 @@
 const db = require("../models");
-const { getSeedUsers, getSeedBooks } = require("./seed-data");
+const {
+  getSeedUsers,
+  getSeedBooks,
+  getSeedPublishers,
+} = require("./seed-data");
 
 async function seedUsers() {
   const users = getSeedUsers();
@@ -35,5 +39,6 @@ function getRandomItem(arr = []) {
 module.exports = {
   seedUsers: seedUsers,
   seedBooks: seedBooks,
+  seedPublishers: seedPublishers,
   getRandomItem: getRandomItem,
 };
