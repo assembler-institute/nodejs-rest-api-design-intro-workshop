@@ -17,7 +17,7 @@ We can test and interact with the API any POSTMAN type app or with VS code plugg
 
 ### GET
 - [get-all](https://yaigenes.cat/api/tasks) --- https://yaigenes.cat/api/tasks
-- [get-by-title](https://yaigenes.cat/api/tasks?title=test3) --- https://yaigenes.cat/api/tasks?title=test
+- [get-by-title](https://yaigenes.cat/api/tasks?title=test3) --- https://yaigenes.cat/api/tasks?title=test3
 - [get-pagination](https://yaigenes.cat/api/tasks?page=1&size=5) --- https://yaigenes.cat/api/tasks?page=1&size=5
 - [get-by-id](https://yaigenes.cat/api/tasks/61bfc6f0f53ca098e97efb79) --- https://yaigenes.cat/api/tasks/61bfc6f0f53ca098e97efb79
 - [get-all-done](https://yaigenes.cat/api/tasks/done) --- https://yaigenes.cat/api/tasks/done
@@ -32,7 +32,7 @@ We can test and interact with the API any POSTMAN type app or with VS code plugg
 }
 
 ### PUT
-- [update](http://localhost:5000/api/tasks/61bfc6f0f53ca098e97efb79) --- http://localhost:5000/api/tasks/61bfc6f0f53ca098e97efb79  -> Content-Type: application/json
+- [update](http://localhost:5000/api/tasks/61bfc706f53ca098e97efb7d) --- http://localhost:5000/api/tasks/61bfc706f53ca098e97efb7d  -> Content-Type: application/json
 
 {
   "description": "like a frog in the pond"
@@ -40,9 +40,11 @@ We can test and interact with the API any POSTMAN type app or with VS code plugg
 
 ### DELETE
 
-- [delete](https://yaigenes.cat/api/tasks/61bfc706f53ca098e97efb7d) --- https://yaigenes.cat/api/tasks/61bfc706f53ca098e97efb7d
+- [delete](https://yaigenes.cat/api/tasks/61bfc6f0f53ca098e97efb79) --- https://yaigenes.cat/api/tasks/61bfc6f0f53ca098e97efb79
 
-<hr style="color:red"/>
+<hr/>
+<hr/>
+<hr/>
 
 # Assembler School: Node.js REST API Design Intro Workshop <!-- omit in toc -->
 
