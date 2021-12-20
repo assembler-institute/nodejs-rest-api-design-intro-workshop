@@ -1,5 +1,49 @@
 `mongodb` `#assembler-school` `#master-in-software-engineering`
 
+# Solution: Yaiser Avila Rodríguez
+<p>
+CRUD REST-API with Nodejs, Express and MongoDB deployed using Clouding.io, nginx and certbot. 
+</p>
+
+<hr/>
+## Deployment dom: https://yaigenes.cat
+## Repo: https://github.com/YaiGenes/node_API_REST.git
+<hr/>
+
+## API-CRUD Documentation
+<p>
+We can test and interact with the API any POSTMAN type app or with VS code pluggins like ThunderClient or REST_Server. 
+</p>
+
+### GET
+- [get-all](https://yaigenes.cat/api/tasks) --- https://yaigenes.cat/api/tasks
+- [get-by-title](https://yaigenes.cat/api/tasks?title=test) --- https://yaigenes.cat/api/tasks?title=test
+- [get-pagination](https://yaigenes.cat/api/tasks?page=1&size=5) --- https://yaigenes.cat/api/tasks?page=1&size=5
+- [get-by-id](https://yaigenes.cat/api/tasks/61bfc6f0f53ca098e97efb79) --- https://yaigenes.cat/api/tasks/61bfc6f0f53ca098e97efb79
+- [get-all-done](https://yaigenes.cat/api/tasks/done) --- https://yaigenes.cat/api/tasks/done
+
+### POST
+- [post](https://yaigenes.cat/api/tasks) --- https://yaigenes.cat/api/tasks -> Content-Type: application/json
+
+{
+  "title": "test3",
+  "description": "this is the test3",
+  "done": true
+}
+
+### PUT
+- [update](http://localhost:5000/api/tasks/61bfc6f0f53ca098e97efb79) --- http://localhost:5000/api/tasks/61bfc6f0f53ca098e97efb79  -> Content-Type: application/json
+
+{
+  "description": "like a frog in the pond"
+}
+
+### DELETE
+
+- [delete](https://yaigenes.cat/api/tasks/61bfc706f53ca098e97efb7d) --- https://yaigenes.cat/api/tasks/61bfc706f53ca098e97efb7d
+
+
+
 # Assembler School: Node.js REST API Design Intro Workshop <!-- omit in toc -->
 
 In this workshop you will learn how to build a REST API with Node.js, MongoDB and Mongoose.
