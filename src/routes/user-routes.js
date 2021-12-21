@@ -8,13 +8,13 @@ const UserRouter = Router();
 // A shorter way of using auth for all the endpoints controlled
 // by this router is to define the auth middleware on it
 // instead of on each route handler
-UserRouter.use("/users", authMiddleware);
+UserRouter.use("/", authMiddleware);
 
-UserRouter.get("/users", userController.getUsers);
-UserRouter.get("/users/:userId", userController.getUserDetails);
-UserRouter.post("/users", userController.createUser);
-UserRouter.patch("/users/:userId", userController.updateUser);
-UserRouter.delete("/users/:userId", userController.deleteUser);
+UserRouter.get("/", userController.getUsers);
+UserRouter.get("/:userId", userController.getUserDetails);
+UserRouter.post("/", userController.createUser);
+UserRouter.patch("/:userId", userController.updateUser);
+UserRouter.delete("/:userId", userController.deleteUser);
 
 UserRouter.post("/sign-up", authMiddleware, userController.signUp);
 
