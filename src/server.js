@@ -11,6 +11,12 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(json());
 
+app.use("/", (req, res) => {
+  res.status(200).send({
+    data: "say hello!",
+  });
+});
+
 app.use(bookRouter);
 
 module.exports = app;
