@@ -80,7 +80,23 @@ const createBook = async (req, res, next) => {
  *
  * And call lean() and exec() on the query
  */
-async function getBooks() {}
+// async function getBooks() {}
+const getBooks = async (req, res, next) => {
+  try {
+    const allBooks = await db.Book.find({})
+      .select({
+        title: 1,
+      })
+      .lean()
+      .exec();
+
+    res.status(200).send({
+      data: allBooks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * 1. Create the book CRUD controllers
