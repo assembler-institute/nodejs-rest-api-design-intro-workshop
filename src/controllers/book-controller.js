@@ -35,7 +35,33 @@ const { logger } = require("../config/config");
  * Wrap the code in a try/catch statement and call next(error)
  * with the error object that is caught
  */
-async function createBook() {}
+// async function createBook() {}
+const createBook = async (req, res, next) => {
+  const { title, author, genre, year, pages } = req.body;
+
+  try {
+    const newBook = await db.Book.create({
+      title,
+      author,
+      genre,
+      year,
+      pages,
+    });
+
+    res.status(201).send({
+      data: {
+        _id: newBook._id,
+        title: newBook.title,
+        author: newBook.author,
+        genre: newBook.genre,
+        year: newBook.year,
+        pages: newBook.pages,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * 1. Create the book CRUD controllers
