@@ -130,7 +130,34 @@ const getBooks = async (req, res, next) => {
  *
  * And call lean() and exec() on the query
  */
-async function getSingleBook() {}
+// async function getSingleBook() {}
+
+const getSingleBook = async (req, res, next) => {
+  const { bookId } = req.params;
+
+  try {
+    const detailBook = await db.Book.findOne({
+      _id: bookId,
+    })
+      .select({
+        title: 1,
+        pages: 1,
+      })
+      .populate({
+        path: "author",
+        select: { firstName: 1, lastName: 1 },
+      })
+      .lean()
+      .exec();
+
+      res.status(200).send({
+        data: detailBook,
+        })
+  
+    } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * 1. Create the book CRUD controllers
