@@ -150,11 +150,10 @@ const getSingleBook = async (req, res, next) => {
       .lean()
       .exec();
 
-      res.status(200).send({
-        data: detailBook,
-        })
-  
-    } catch (error) {
+    res.status(200).send({
+      data: detailBook,
+    });
+  } catch (error) {
     next(error);
   }
 };
@@ -184,7 +183,34 @@ const getSingleBook = async (req, res, next) => {
  * Wrap the code in a try/catch statement and call next(error)
  * with the error object that is caught
  */
-async function updateBook() {}
+// async function updateBook() {}
+const updateBook = async (req, res, next) => {
+  const { bookId } = req.params;
+  const { title, pages } = req.body;
+
+  try {
+    const bookUpdate = await db.Book.findOneAndUpdate(
+      {
+        _id: bookId,
+      },
+      {
+        $set: {
+          title: title,
+          pages: pages,
+        },
+      },
+      {
+        new: true,
+      },
+    );
+
+    res.status(200).send({
+      data: bookUpdate,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * 1. Create the book CRUD controllers
