@@ -84,12 +84,12 @@ const createBook = async (req, res, next) => {
 const getBooks = async (req, res, next) => {
   try {
     const allBooks = await db.Book.find({})
-      .select({
-        title: 1,
-      })
-      .lean()
-      .exec();
-
+    .select({
+      title: 1,
+    })
+    .lean()
+    .exec();
+    
     res.status(200).send({
       data: allBooks,
     });
@@ -230,7 +230,26 @@ const updateBook = async (req, res, next) => {
  * Wrap the code in a try/catch statement and call next(error)
  * with the error object that is caught
  */
-async function deleteBook() {}
+// async function deleteBook() {}
+
+const deleteBook = async(req, res, next) => {
+  const { bookId } = req.params;
+
+  try {
+   const removeBoook = db.Book.findOneAndDelete({
+    _id: bookId,
+  })
+
+  res.status(200).send({
+    data: removeBoook._id,
+  })
+
+  } catch (error) {
+    next(error);
+  }
+
+}
+
 
 module.exports = {
   createBook: createBook,
